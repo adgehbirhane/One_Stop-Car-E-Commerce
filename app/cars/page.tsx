@@ -5,11 +5,11 @@ import { fetchCars } from "@/utils";
 
 async function Cars({ searchParams }: HomeProps) {
   const allCars = await fetchCars({
-    manufacturer: searchParams.manufacturer || "ford",
-    year: searchParams.year || 2021,
-    fuel: searchParams.fuel || "gas",
-    limit: searchParams.limit || 10,
-    model: searchParams.model || "",
+      manufacturer: searchParams.manufacturer || "ford",
+      year: searchParams.year || 2021,
+      fuel: searchParams.fuel || "gas",
+      limit: searchParams.limit || 10,
+      model: searchParams.model || "", 
   });
   const isCarsEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
 
@@ -33,9 +33,8 @@ async function Cars({ searchParams }: HomeProps) {
             ))}
           </div>
           <ShowMore
-            pageNumber={(searchParams.limit || 10) / 10}
-            isNext={(searchParams.limit || 10) > allCars?.length}
-          />
+          pageNumber={(searchParams.limit || 10)/10}
+          isNext={(searchParams.limit || 10)> allCars?.length}/>
         </section>
       ) : (
         <h2 className="home__error-container">
