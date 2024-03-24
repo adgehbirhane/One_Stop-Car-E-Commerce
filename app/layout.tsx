@@ -3,8 +3,8 @@ import "./globals.css";
 import { Footer, Navbar } from "@/components";
 
 export const metadata: Metadata = {
-  title: "DBU Cars",
-  description: "Debre Berhan University Cars",
+  title: "CarHub",
+  description: "Awesome Cars",
 };
 
 export default function RootLayout({

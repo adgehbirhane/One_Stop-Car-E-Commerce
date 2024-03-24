@@ -11,6 +11,7 @@ async function Cars({ searchParams }: HomeProps) {
       limit: searchParams.limit || 10,
       model: searchParams.model || "", 
   });
+  
   const isCarsEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
 
   return (
