@@ -18,7 +18,7 @@ const Navbar = () => {
         </Link>
         <Link href="https://belaybirhanu.netlify.app" target="_blank">
           <CustomButton
-            title="sign in"
+            title="Visit me"
             btnType="button"
             containerStyles="text-primary-blue rounded-full 
               bg-white min-w-[130px]"
