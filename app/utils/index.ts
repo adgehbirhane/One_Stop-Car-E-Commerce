@@ -1,4 +1,4 @@
-import { CarProps, FilterProps } from "@/types";
+import { CarProps, FilterProps } from "@/app/types";
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
   const basePricePerDay = 50;
@@ -28,9 +28,8 @@ export const deleteSearchParams = (type: string) => {
 
   newSearchParams.delete(type.toLocaleLowerCase());
 
-  const newPathname = `${
-    window.location.pathname
-  }?${newSearchParams.toString()}`;
+  const newPathname = `${window.location.pathname
+    }?${newSearchParams.toString()}`;
 
   return newPathname;
 };
