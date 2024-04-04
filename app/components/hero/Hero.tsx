@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { CustomButton } from ".";
+import { CustomButton } from "..";
 import Link from "next/link";
 
 const Hero = () => {
@@ -15,18 +15,18 @@ const Hero = () => {
         </p>
         <Link href="/cars" className="">
           <CustomButton
-             title="Explore Cars"
+            title="Explore Cars"
             containerStyles="bg-primary-blue text-white rounded-full mt-10"
             rightIcon={""}
           />
         </Link>
-      </div> 
+      </div>
       <div className="hero__image-container">
         <div className="hero__image">
           <Image src="/hero.png" alt="hero" fill className="object-contain" />
           <div className="hero__image-overlay" />
         </div>
-      </div> 
+      </div>
     </div>
   );
 };

@@ -4,9 +4,9 @@ import { Dialog, Transition } from "@headlessui/react";
 import { CarProps } from "@/app/types";
 import { generateCarImageUrl } from "@/app/utils";
 
-import CustomButton from "./CustomButton";
-import axiosInstance from "../api";
-import SERVER_API_URL from "../config";
+import CustomButton from "../button/CustomButton";
+import axiosInstance from "../../api";
+import SERVER_API_URL from "../../config";
 
 
 interface CarDetailsProps {
