@@ -9,7 +9,7 @@ const Footer = () => {
         <div>
           <Link href="/">
             <Image
-              src="/logo.svg"
+              src="/icon/logo.svg"
               alt="logo"
               width={118}
               height={18}
@@ -22,32 +22,32 @@ const Footer = () => {
           <p className="text-base text-gray-700">&copy; All rights reserved</p>
         </div>
         <div className="flex flex-row justify-between gap-2">
-          <Link href="https://www.linkedin.com/in/adgehbirhane" target="_blank">
+          <Link href="#" target="_blank">
             <Image
-              src="/linkedin.svg"
+              src="/media/linkedin.svg"
               alt="linked in logo"
               width={20}
               height={20}
             />
           </Link>
-          <Link href="https://twitter.com/adgehbirhane" target="_blank">
+          <Link href="#" target="_blank">
             <Image
-              src="/twitter.svg"
+              src="/media/twitter.svg"
               alt="twitter in logo"
               width={20}
               height={20}
             />
           </Link>
-          <Link href="https://github.com/adgehbirhane" target="_blank">
+          <Link href="#" target="_blank">
             <Image
-              src="/github.svg"
+              src="/media/github.svg"
               alt="github in logo"
               width={20}
               height={20}
             />
           </Link>
         </div>
-      </div> 
+      </div>
     </footer>
   );
 };

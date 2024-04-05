@@ -76,7 +76,7 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
                     onClick={closeModal}
                   >
                     <Image
-                      src="/close.svg"
+                      src="/icon/close.svg"
                       alt="close"
                       width={20}
                       height={20}
@@ -149,7 +149,7 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
                         title="Add to Cart"
                         containerStyles="w-full py-[16px] rounded-full bg-primary-blue"
                         textStyles="text-white text-[14px] leading-[17px] font-bold"
-                        rightIcon="/cart.png"
+                        rightIcon="/icon/cart.png"
                         handleClick={() => handleAddToCart()}
                       />
                     </div>
