@@ -9,6 +9,7 @@ import CarCard from "./card/CarCard";
 import ShowMore from "./button/ShowMore";
 import Auth from "./auth/Auth";
 import SignUp from "./auth/signUp/SignUp";
+import CartCarCard from "./card/CartCarCard";
 
 export {
   Hero,
@@ -21,5 +22,6 @@ export {
   CarCard,
   ShowMore,
   Auth,
-  SignUp
+  SignUp,
+  CartCarCard
 };

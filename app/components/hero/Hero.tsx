@@ -1,10 +1,22 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CustomButton } from "..";
 import Link from "next/link";
 
 const Hero = () => {
-  const user = localStorage.getItem("token");
+  const [user, setUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (token) {
+        setUser(token);
+      }
+    }
+  }, []);
+
   return (
     <div className="hero">
       <div className="flex-1 pt-36 padding-x">

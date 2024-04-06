@@ -5,16 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { LuLogOut } from "react-icons/lu";
 import { jwtDecode } from 'jwt-decode';
-
 import { CustomButton, Auth } from "..";
 import { useRouter } from "next/navigation";
 import { User } from "@/app/types";
-
 
 const Navbar = () => {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('');
   const [userLoggedIn, setUserLoggedIn] = useState<User | undefined>();
+  const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,6 +26,21 @@ const Navbar = () => {
         }
       }
     }
+
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup function to remove event listener
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const toggleAuth = () => {
@@ -44,7 +58,7 @@ const Navbar = () => {
   }
 
   return (
-    <header className="w-full absolute z-10">
+    <header className={`w-full fixed z-10 transition-colors duration-300`} style={{ backdropFilter: scrolled ? 'blur(10px)' : 'none' }}>
       <nav className="max-w-[1440px] mx-auto flex justify-between items-center sm:px-16 py-4">
         <Link href="/" className="flex justify-center items-center">
           <Image
@@ -67,8 +81,8 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-full h-full flex items-center justify-center rounded-r-md cursor-pointer" >
-                <button className="ext-black  bg-white hover:bg-gray-300  font-bold w-full h-full px-5" onClick={logout}> <LuLogOut className="text-xl" /></button>
+              <div className="w-full h-full flex items-center justify-center cursor-pointer rounded-r-md" >
+                <button className="ext-black  bg-white hover:bg-gray-300  font-bold w-full h-full px-5 rounded-r-md" onClick={logout}> <LuLogOut className="text-xl" /></button>
               </div>
             </div>
           ) : (

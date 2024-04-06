@@ -5,7 +5,6 @@ import axiosInstance from "@/app/api";
 import SERVER_API_URL from "@/app/config";
 import { User } from "@/app/types";
 import { jwtDecode } from "jwt-decode";
-import { useRouter } from "next/navigation";
 import { FaGoogle } from "react-icons/fa";
 
 interface SignUpProps {
@@ -20,8 +19,6 @@ const SignUp: React.FC<SignUpProps> = ({ onClose, setUserLoggedIn }) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [error, setError] = useState("");
-
-    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

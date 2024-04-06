@@ -1,12 +1,15 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
-import { CarProps } from "@/app/types";
-import { generateCarImageUrl } from "@/app/utils";
+import { CarProps, User } from "@/app/types";
+import { calculateCarRent, generateCarImageUrl } from "@/app/utils";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import CustomButton from "../button/CustomButton";
 import axiosInstance from "../../api";
 import SERVER_API_URL from "../../config";
+import { jwtDecode } from "jwt-decode";
 
 
 interface CarDetailsProps {
@@ -17,9 +20,24 @@ interface CarDetailsProps {
 
 const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
 
+  const [userLoggedIn, setUserLoggedIn] = useState<User | undefined>();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decodedData = jwtDecode(token) as User;
+        if (decodedData) {
+          setUserLoggedIn(decodedData);
+        }
+      }
+    }
+  }, []);
+
   const handleAddToCart = async () => {
     try {
-      const response = await axiosInstance.post(`${SERVER_API_URL}/product/addToCart`, {
+      const carRent = parseInt(calculateCarRent(car.city_mpg, car.year), 10);
+      const response = await axiosInstance.post(`${SERVER_API_URL}/product/addToCart/${userLoggedIn?.sub}`, {
         city_mpg: car.city_mpg,
         class: car.class,
         combination_mpg: car.combination_mpg,
@@ -32,13 +50,20 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
         model: car.model,
         transmission: car.transmission,
         year: car.year,
-        price: 2541.25,
+        price: carRent * 30 * 12000,
       });
       if (response.status === 201) {
-        console.log("cart added...")
+        toast.success("Item added to cart successfully!");
+        console.log('Show success toast')
       }
-    } catch (error) {
-      // console.log(error)
+    } catch (e: any) {
+      if (e.code === 'ERR_NETWORK') {
+        toast.error('Please check your internet connection');
+      } else if (e.response && e.response.status === 406) {
+        toast.error('This product is already added!');
+      } else {
+        toast.error('unKnown error, please refresh and try again!');
+      }
     }
   }
 
@@ -144,7 +169,7 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
                         </div>
                       ))}
                     </div>
-                    <div className="container">
+                    <div className={`container ${userLoggedIn ? "" : "hidden"}`}>
                       <CustomButton
                         title="Add to Cart"
                         containerStyles="w-full py-[16px] rounded-full bg-primary-blue"
@@ -160,6 +185,7 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
           </div>
         </Dialog>
       </Transition>
+      <ToastContainer /> {/* To render toast notifications */}
     </>
   );
 }
