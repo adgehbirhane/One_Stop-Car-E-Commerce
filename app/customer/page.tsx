@@ -7,10 +7,21 @@ import SERVER_API_URL from "../config";
 import MyCart from "./MyCart";
 import { User } from "../types";
 import { jwtDecode } from "jwt-decode";
+import { useRouter } from "next/navigation";
 
 function Cars() {
 
     const [allCars, setAllCars] = useState([]);
+
+    const router = useRouter();
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                router.push("/");
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const getAllCars = async (userId: string) => {

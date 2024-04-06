@@ -108,7 +108,7 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-      {isAuthOpen && <Auth isOpen={true} onClose={closeAuth} currentPage={currentPage} setCurrentPage={setCurrentPage} setUserLoggedIn={setUserLoggedIn} />}
+      {isAuthOpen && <Auth isOpen={true} onClose={closeAuth} currentPage={currentPage} userLoggedIn={userLoggedIn} setCurrentPage={setCurrentPage} setUserLoggedIn={setUserLoggedIn} />}
     </header>
   );
 };

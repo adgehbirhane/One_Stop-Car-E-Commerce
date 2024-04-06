@@ -5,16 +5,20 @@ import Login from "./login/Login";
 import SignUp from "./signUp/SignUp";
 import { User } from "@/app/types";
 import SignUpWithGoogle from "./signUp/SignUpWithGoogle";
+import Forgot from "./forgot-password/Forgot";
+import VerificationCode from "./forgot-password/VerificationCode";
+import ChangePassword from "./forgot-password/ChangePassword";
 
 interface AuthProps {
     isOpen: boolean;
     onClose: () => void;
-    currentPage: string,
-    setCurrentPage: React.Dispatch<React.SetStateAction<string>>
-    setUserLoggedIn: React.Dispatch<React.SetStateAction<User | undefined>>
+    currentPage: string;
+    userLoggedIn: User | undefined;
+    setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
+    setUserLoggedIn: React.Dispatch<React.SetStateAction<User | undefined>>;
 }
 
-const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, setCurrentPage, setUserLoggedIn }) => {
+const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, userLoggedIn, setCurrentPage, setUserLoggedIn }) => {
 
     const authRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +44,7 @@ const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, setCurrentPag
                 <div>
                     <button
                         onClick={() => setCurrentPage("signIn")}
-                        className={currentPage === "signIn" ? "active-btn p-10 pb-5 hover:bg-gray-300 font-bold w-1/2" : "p-10 pb-5 text-white bg-gray-500 hover:bg-gray-300 font-bold w-1/2"}
+                        className={currentPage === "signIn" || currentPage || "forgot" || currentPage || "verificationCode" || currentPage || "changePassword" ? "active-btn p-10 pb-5 hover:bg-gray-300 font-bold w-1/2" : "p-10 pb-5 text-white bg-gray-500 hover:bg-gray-300 font-bold w-1/2"}
                     >
                         Sign In
                     </button>
@@ -59,6 +63,15 @@ const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, setCurrentPag
                 )}
                 {currentPage === "signUpWithGoogle" && (
                     <SignUpWithGoogle onClose={onClose} setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
+                )}
+                {currentPage === "forgot" && (
+                    <Forgot setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
+                )}
+                {currentPage === "verificationCode" && (
+                    <VerificationCode userLoggedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
+                )}
+                {currentPage === "changePassword" && (
+                    <ChangePassword onClose={onClose} setUserLoggedIn={setUserLoggedIn} />
                 )}
             </div>
         </div>

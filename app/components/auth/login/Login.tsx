@@ -75,7 +75,7 @@ const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn, setCurrentPage 
                     className="block w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                 />
                 <div className="mb-2 text-right">
-                    <a className="hover:underline cursor-pointer">forgot password?</a>
+                    <a onClick={() => setCurrentPage("forgot")} className="hover:underline cursor-pointer">forgot password?</a>
                 </div>
 
                 <button
@@ -83,14 +83,6 @@ const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn, setCurrentPage 
                     className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 >
                     Login
-                </button>
-
-                <div className="m-1 text-center">Or</div>
-                <button
-                    type="submit"
-                    className=" flex flex-row justifyCenter gap-3 w-full bg-gray-200 hover:bg-gray-300 text-white font-bold py-2 px-4 mt-2 rounded"
-                >
-                    <FaGoogle /> Sign in with Google
                 </button>
                 <div className="m-1 my-2 text-right">
                     Don't have an account?  <a onClick={() => setCurrentPage("signUp")} className="hover:underline cursor-pointer text-blue"> Yes!

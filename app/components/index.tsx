@@ -10,6 +10,9 @@ import ShowMore from "./button/ShowMore";
 import Auth from "./auth/Auth";
 import SignUp from "./auth/signUp/SignUp";
 import CartCarCard from "./card/CartCarCard";
+import Forgot from "./auth/forgot-password/Forgot";
+import VerificationCode from "./auth/forgot-password/VerificationCode";
+import ChangePassword from "./auth/forgot-password/ChangePassword";
 
 export {
   Hero,
@@ -23,5 +26,8 @@ export {
   ShowMore,
   Auth,
   SignUp,
-  CartCarCard
+  CartCarCard,
+  Forgot,
+  VerificationCode,
+  ChangePassword
 };
