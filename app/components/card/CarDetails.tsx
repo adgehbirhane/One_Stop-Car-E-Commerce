@@ -185,7 +185,7 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
           </div>
         </Dialog>
       </Transition>
-      <ToastContainer /> {/* To render toast notifications */}
+      <ToastContainer />
     </>
   );
 }

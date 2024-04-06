@@ -2,7 +2,8 @@
 
 import { CartProps } from "@/app/types";
 import Image from "next/image";
-import { CartCarCard } from "../components";
+import { CartCarCard, CustomButton } from "../components";
+import Link from "next/link";
 
 interface MyCartProps {
     allCars: CartProps[];
@@ -15,7 +16,7 @@ function MyCart({ allCars }: MyCartProps) {
     return (
         <div className="mt-22 padding-x padding-y max-width" id="discover">
             <div className="home_text-container">
-                <p className=" mt-12">Explore the cars you might like</p>
+                <div className="mt-14">Explore the cars you might like</div>
             </div>
             {!isCarsEmpty ? (
                 <section>
@@ -23,6 +24,15 @@ function MyCart({ allCars }: MyCartProps) {
                         {allCars?.map((car) => (
                             <CartCarCard key={car?.combination_mpg} car={car} />
                         ))}
+                    </div>
+                    <div className="w-full flex-center gap-5 mt-10">
+                        <Link href="/cars" className="">
+                            <CustomButton
+                                title="Explore All Cars"
+                                containerStyles="bg-primary-blue text-white rounded-full mt-10 transition-all duration-300 hover:text-black hover:bg-light-blue"
+                                rightIcon={""}
+                            />
+                        </Link>
                     </div>
                 </section>
             ) : (

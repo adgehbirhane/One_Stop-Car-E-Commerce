@@ -15,7 +15,6 @@ function Cars() {
     useEffect(() => {
         const getAllCars = async (userId: string) => {
             try {
-                console.log("user id: ", userId)
                 const response = await axiosInstance.get(`${SERVER_API_URL}/product/cartsByUserId/${userId}`);
                 if (response.status === 200) {
                     setAllCars(response.data);

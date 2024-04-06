@@ -1,9 +1,11 @@
 import { Fragment } from "react";
 import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
-import { CarProps } from "@/app/types";
-import { calculateCarRent, generateCarImageUrl } from "@/app/utils";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
+import { CarProps } from "@/app/types";
+import { generateCarImageUrl } from "@/app/utils";
 import CustomButton from "../button/CustomButton";
 import axiosInstance from "../../api";
 import SERVER_API_URL from "../../config";
@@ -17,16 +19,26 @@ interface CartCarDetailsProps {
 
 const CartCarDetails = ({ isOpen, closeModal, car }: CartCarDetailsProps) => {
 
+    const cartId: string | undefined = car.id;
+
     const handleBuyCart = async () => {
         try {
-            const response = await axiosInstance.post(`${SERVER_API_URL}/product/addToCart`, {
-
-            });
+            const response = await axiosInstance.post(`${SERVER_API_URL}/order/payment/${cartId}`);
             if (response.status === 201) {
-                console.log("cart added...")
+                console.log("bill: ", response.data.bill_url)
+                window.open(response.data.bill_url, '_blank');
+                closeModal()
             }
-        } catch (error) {
-            // console.log(error)
+        } catch (e: any) {
+            if (e.code === 'ERR_NETWORK') {
+                toast.error('Please check your internet connection');
+            } else if (e.response && e.response.status === 406) {
+                toast.error('user not found!');
+            } else if (e.response && e.response.status === 404) {
+                toast.error('cart not found!');
+            } else {
+                toast.error('unKnown error, please refresh and try again!');
+            }
         }
     }
 
@@ -120,17 +132,27 @@ const CartCarDetails = ({ isOpen, closeModal, car }: CartCarDetailsProps) => {
                                         </h2>
 
                                         <div className="mt-3 flex flex-wrap gap-4">
-                                            {Object.entries(car).map(([key, value]) => (
-                                                <div
-                                                    className="flex justify-between gap-5 w-full text-right"
-                                                    key={key}
-                                                >
-                                                    <h4 className="text-grey capitalize">
-                                                        {key.split("_").join(" ")}
-                                                    </h4>
-                                                    <p className="text-black-100 font-semibold">{value}</p>
-                                                </div>
-                                            ))}
+                                            {Object.entries(car).map(([key, value]) => {
+
+                                                const excludeKeys = ['id', 'updatedAt', 'status', 'userId', 'orderId', 'order'];
+
+                                                if (!excludeKeys.includes(key)) {
+                                                    return (
+                                                        <div
+                                                            className="flex justify-between gap-5 w-full text-right"
+                                                            key={key}
+                                                        >
+                                                            <h4 className="text-grey capitalize">
+                                                                {key.split("_").join(" ")}
+                                                            </h4>
+                                                            <p className="text-black-100 font-semibold">{value}</p>
+                                                        </div>
+                                                    );
+                                                } else {
+                                                    return null;
+                                                }
+                                            })}
+
                                         </div>
                                         <div className="container">
                                             <CustomButton
@@ -138,7 +160,7 @@ const CartCarDetails = ({ isOpen, closeModal, car }: CartCarDetailsProps) => {
                                                 containerStyles="w-full py-[16px] rounded-full bg-primary-blue"
                                                 textStyles="text-white text-[14px] leading-[17px] font-bold"
                                                 rightIcon="/icon/cart.png"
-                                                handleClick={() => handleBuyCart()}
+                                                handleClick={handleBuyCart}
                                             />
                                         </div>
                                     </div>

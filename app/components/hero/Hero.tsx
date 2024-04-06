@@ -21,10 +21,10 @@ const Hero = () => {
     <div className="hero">
       <div className="flex-1 pt-36 padding-x">
         <h1 className="hero__title">
-          Find, book or rent a car -- quickly and easily!
+          Drive into Savings: Your One-Stop Car E-Commerce!
         </h1>
         <p className="hero__subtitle">
-          Streamline your car rental experience with out effortless process
+          Rev up your savings and streamline your car-buying experience with our comprehensive, one-stop online platform.
         </p>
         <div className="flex flex-row gap-5">
           <Link href="/cars" className="">
