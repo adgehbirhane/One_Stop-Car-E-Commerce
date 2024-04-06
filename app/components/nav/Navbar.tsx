@@ -20,9 +20,13 @@ const Navbar = () => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
       if (token) {
-        const decodedData = jwtDecode(token) as User;
-        if (decodedData) {
-          setUserLoggedIn(decodedData);
+        try {
+          const decodedData = jwtDecode(token) as User;
+          if (decodedData) {
+            setUserLoggedIn(decodedData);
+          }
+        } catch (e) {
+          console.log("Token Error: ", e)
         }
       }
     }

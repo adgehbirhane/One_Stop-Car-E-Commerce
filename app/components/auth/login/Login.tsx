@@ -18,10 +18,13 @@ const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn, setCurrentPage 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false)
+
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await axiosInstance.post(`${SERVER_API_URL}/auth/signin`, {
                 email, password
@@ -50,6 +53,7 @@ const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn, setCurrentPage 
                 setError('unKnown error, please refresh and try again!');
             }
         }
+        setLoading(false)
     };
 
     return (
@@ -79,10 +83,11 @@ const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn, setCurrentPage 
                 </div>
 
                 <button
+                    disabled={loading}
                     type="submit"
-                    className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className={`flex justify-center items-center w-full ${loading ? "bg-gray-300" : "bg-blue-500  hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded`}
                 >
-                    Login
+                    {loading && <div className="animate-spin rounded-full  h-5 w-5 border-t-2 border-b-2 border-gray-900"></div>}   Login
                 </button>
                 <div className="m-1 my-2 text-right">
                     Don't have an account?  <a onClick={() => setCurrentPage("signUp")} className="hover:underline cursor-pointer text-blue"> Yes!

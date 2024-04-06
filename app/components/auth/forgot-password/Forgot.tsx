@@ -14,9 +14,11 @@ interface ForgotProps {
 const Forgot: React.FC<ForgotProps> = ({ setUserLoggedIn, setCurrentPage }) => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await axios.post(`${SERVER_API_URL}/auth/forgotPassword`, {
                 email
@@ -44,6 +46,7 @@ const Forgot: React.FC<ForgotProps> = ({ setUserLoggedIn, setCurrentPage }) => {
                 setError('unKnown error, please refresh and try again!');
             }
         }
+        setLoading(false);
     };
 
     return (
@@ -60,11 +63,12 @@ const Forgot: React.FC<ForgotProps> = ({ setUserLoggedIn, setCurrentPage }) => {
                     onChange={(e) => setEmail(e.target.value)}
                     className="block w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                 />
-
                 <button
+                    disabled={loading}
                     type="submit"
-                    className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className={`flex justify-center items-center w-full ${loading ? "bg-gray-300" : "bg-blue-500  hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded`}
                 >
+                    {loading && <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-gray-900"></div>}
                     Get verification code
                 </button>
                 <div className="m-1 my-2 text-right">
