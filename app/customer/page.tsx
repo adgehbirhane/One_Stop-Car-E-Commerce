@@ -36,12 +36,16 @@ function Cars() {
         };
 
         if (typeof window !== 'undefined') {
-            const token = localStorage.getItem('token');
-            if (token) {
-                const decodedData = jwtDecode(token) as User;
-                if (decodedData) {
-                    getAllCars(decodedData.sub)
+            try {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const decodedData = jwtDecode(token) as User;
+                    if (decodedData) {
+                        getAllCars(decodedData.sub)
+                    }
                 }
+            } catch (e) {
+                // console.log(e);
             }
         }
     }, []);
