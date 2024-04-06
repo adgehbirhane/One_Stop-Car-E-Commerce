@@ -8,13 +8,61 @@ import { jwtDecode } from 'jwt-decode';
 import { CustomButton, Auth } from "..";
 import { useRouter } from "next/navigation";
 import { User } from "@/app/types";
+import { RxAvatar } from "react-icons/rx";
+import axiosInstance from "@/app/api";
+import SERVER_API_URL from "@/app/config";
 
 const Navbar = () => {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('');
   const [userLoggedIn, setUserLoggedIn] = useState<User | undefined>();
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(false);
+  const [avatar, setAvatar] = useState<string | null>(null);
   const router = useRouter();
+
+  const getAvatar = async () => {
+    try {
+      const response = await axiosInstance.get(`${SERVER_API_URL}/avatar/getAvatarById/${userLoggedIn?.sub}`, {
+        responseType: 'blob',
+      });
+      if (response.status === 200) {
+        const url = URL.createObjectURL(response.data);
+        setAvatar(url);
+      }
+    } catch (e) {
+      setAvatar(null);
+    }
+  }
+
+
+  const handleChange = async (e: any) => {
+    setProgress(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', e.target.files[0]);
+
+      const response = await axiosInstance.patch(
+        `${SERVER_API_URL}/avatar/update/${userLoggedIn?.sub}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        getAvatar();
+      }
+    } catch (e: any) {
+      if (e.response.status === 404) {
+        setAvatar(null);
+      }
+    }
+    setProgress(false);
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -24,6 +72,7 @@ const Navbar = () => {
           const decodedData = jwtDecode(token) as User;
           if (decodedData) {
             setUserLoggedIn(decodedData);
+            getAvatar();
           }
         } catch (e) {
           console.log("Token Error: ", e)
@@ -44,7 +93,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [getAvatar]);
 
   const toggleAuth = () => {
     setIsAuthOpen(!isAuthOpen);
@@ -77,7 +126,14 @@ const Navbar = () => {
             <div className="flex flex-row justify-center">
               <div className={`p-4 rounded-l-md  ${scrolled ? "bg-gray-100" : "bg-white"}`} >
                 <div className="flex flex-row items-center justify-center gap-2">
-                  <div className="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center">Avatar</div>
+                  <div className="bg-blue-500 text-white overflow-hidden rounded-full w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-blue-600">
+                    <label htmlFor="avatarInput">
+                      {avatar && (
+                        <Image src={avatar} alt="Avatar" width={50} height={50} />
+                      )}
+                      <input id="avatarInput" accept="image/*" hidden type="file" onChange={handleChange} />
+                    </label>
+                  </div>
                   <div>
                     <div className="font-semibold">{userLoggedIn?.fullName}</div>
                     <div className="text-gray-600">{userLoggedIn?.email}</div>
