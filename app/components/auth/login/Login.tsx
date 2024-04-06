@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import axiosInstance from "@/app/api";
 import SERVER_API_URL from "@/app/config";
 import { jwtDecode } from 'jwt-decode';
-import { FaGoogle } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import { User } from "@/app/types";
 
@@ -31,7 +30,7 @@ const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn, setCurrentPage 
             });
             if (response.status === 202) {
                 const user = response.data;
-                localStorage.setItem("token", user.token)
+                localStorage.setItem("token", user.token);
                 const decodedData = jwtDecode(user.token) as User;
                 if (decodedData) {
                     setUserLoggedIn(decodedData);
