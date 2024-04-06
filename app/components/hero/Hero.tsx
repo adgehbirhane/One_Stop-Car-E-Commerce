@@ -4,6 +4,7 @@ import { CustomButton } from "..";
 import Link from "next/link";
 
 const Hero = () => {
+  const user = localStorage.getItem("token");
   return (
     <div className="hero">
       <div className="flex-1 pt-36 padding-x">
@@ -13,13 +14,24 @@ const Hero = () => {
         <p className="hero__subtitle">
           Streamline your car rental experience with out effortless process
         </p>
-        <Link href="/cars" className="">
-          <CustomButton
-            title="Explore Cars"
-            containerStyles="bg-primary-blue text-white rounded-full mt-10"
-            rightIcon={""}
-          />
-        </Link>
+        <div className="flex flex-row gap-5">
+          <Link href="/cars" className="">
+            <CustomButton
+              title="Explore Cars"
+              containerStyles="bg-primary-blue text-white rounded-full mt-10 transition-all duration-300 hover:text-black hover:bg-light-blue"
+              rightIcon={""}
+            />
+          </Link>
+          {user && (
+            <Link href="/customer" className="">
+              <CustomButton
+                title="My Carts"
+                containerStyles="bg-primary-blue text-white rounded-full mt-10 transition-all duration-300 hover:text-black hover:bg-light-blue"
+                rightIcon={""}
+              />
+            </Link>
+          )}
+        </div>
       </div>
       <div className="hero__image-container">
         <div className="hero__image">

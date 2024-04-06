@@ -1,30 +1,63 @@
 "use client"
 
 import React, { useState } from "react";
+import axiosInstance from "@/app/api";
+import SERVER_API_URL from "@/app/config";
+import { User } from "@/app/types";
+import { jwtDecode } from "jwt-decode";
+import { useRouter } from "next/navigation";
 import { FaGoogle } from "react-icons/fa";
 
 interface SignUpProps {
     onClose: () => void;
+    setUserLoggedIn: React.Dispatch<React.SetStateAction<User | undefined>>
 }
 
-const SignUp: React.FC<SignUpProps> = ({ onClose }) => {
+const SignUp: React.FC<SignUpProps> = ({ onClose, setUserLoggedIn }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [error, setError] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const router = useRouter()
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Email:", email);
-        console.log("Password:", password);
-        onClose();
+        try {
+            const response = await axiosInstance.post(`${SERVER_API_URL}/auth/signup`, {
+                firstName, lastName, email, password
+            });
+            if (response.status === 201) {
+                const user = response.data;
+                localStorage.setItem("token", user.token)
+                const decodedData = jwtDecode(user.token) as User;
+                if (decodedData) {
+                    setUserLoggedIn(decodedData);
+                }
+                onClose();
+            }
+
+        } catch (e: any) {
+            if (e.code === 'ERR_NETWORK') {
+                setError('Please check your internet connection');
+            } else if (e.response && e.response.status === 406) {
+                setError('This email is already taken user!');
+            } else {
+                setError('unKnown error, please refresh and try again!');
+            }
+        }
     };
 
     return (
         <div className="p-10 pt-5">
             <form onSubmit={handleSubmit}>
+                {error && (
+                    <div className="w-full px-2 py-2 mb-2 bg-red-200">{error}</div>
+                )}
                 <input
+                    required
                     type="firstName"
                     placeholder="First name"
                     value={firstName}
@@ -32,6 +65,7 @@ const SignUp: React.FC<SignUpProps> = ({ onClose }) => {
                     className="block w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                 />
                 <input
+                    required
                     type="lastName"
                     placeholder="Last name"
                     value={lastName}
@@ -39,6 +73,7 @@ const SignUp: React.FC<SignUpProps> = ({ onClose }) => {
                     className="block w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                 />
                 <input
+                    required
                     type="email"
                     placeholder="Email"
                     value={email}
@@ -46,6 +81,7 @@ const SignUp: React.FC<SignUpProps> = ({ onClose }) => {
                     className="block w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                 />
                 <input
+                    required
                     type="password"
                     placeholder="Password"
                     value={password}
@@ -53,6 +89,7 @@ const SignUp: React.FC<SignUpProps> = ({ onClose }) => {
                     className="block w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                 />
                 <input
+                    required
                     type="confirmPassword"
                     placeholder="Confirm password"
                     value={confirmPassword}

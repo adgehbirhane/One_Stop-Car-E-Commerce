@@ -3,15 +3,17 @@
 import React, { useEffect, useRef } from "react";
 import Login from "./login/Login";
 import SignUp from "./signUp/SignUp";
+import { User } from "@/app/types";
 
 interface AuthProps {
     isOpen: boolean;
     onClose: () => void;
     currentPage: string,
     setCurrentPage: React.Dispatch<React.SetStateAction<string>>
+    setUserLoggedIn: React.Dispatch<React.SetStateAction<User | undefined>>
 }
 
-const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, setCurrentPage }) => {
+const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, setCurrentPage, setUserLoggedIn }) => {
 
     const authRef = useRef<HTMLDivElement>(null);
 
@@ -49,10 +51,10 @@ const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, setCurrentPag
                     </button>
                 </div>
                 {currentPage === "signIn" && (
-                    <Login onClose={onClose} />
+                    <Login onClose={onClose} setUserLoggedIn={setUserLoggedIn} />
                 )}
                 {currentPage === "signUp" && (
-                    <SignUp onClose={onClose} />
+                    <SignUp onClose={onClose} setUserLoggedIn={setUserLoggedIn} />
                 )}
             </div>
         </div>

@@ -75,3 +75,14 @@ export interface ShowMoreProps {
   pageNumber: number;
   isNext: boolean;
 }
+
+export interface User {
+  sub: string,
+  fullName: string,
+  phone: string,
+  email: string,
+  role: string,
+  avatarPath: string,
+  createdAt: Date,
+  updatedAt: Date
+}
