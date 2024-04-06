@@ -54,7 +54,7 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
       });
       if (response.status === 201) {
         toast.success("Item added to cart successfully!");
-        console.log('Show success toast')
+        // console.log('Show success toast')
       }
     } catch (e: any) {
       if (e.code === 'ERR_NETWORK') {
