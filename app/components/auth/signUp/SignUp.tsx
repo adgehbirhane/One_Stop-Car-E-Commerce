@@ -10,9 +10,10 @@ import { FaGoogle } from "react-icons/fa";
 interface SignUpProps {
     onClose: () => void;
     setUserLoggedIn: React.Dispatch<React.SetStateAction<User | undefined>>
+    setCurrentPage: React.Dispatch<React.SetStateAction<string>>
 }
 
-const SignUp: React.FC<SignUpProps> = ({ onClose, setUserLoggedIn }) => {
+const SignUp: React.FC<SignUpProps> = ({ onClose, setUserLoggedIn, setCurrentPage }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -48,10 +49,10 @@ const SignUp: React.FC<SignUpProps> = ({ onClose, setUserLoggedIn }) => {
     };
 
     return (
-        <div className="p-10 pt-5">
+        <div className="p-10 pt-5" style={{ minWidth: 500, minHeight: 450 }}>
             <form onSubmit={handleSubmit}>
                 {error && (
-                    <div className="w-full px-2 py-2 mb-2 bg-red-200">{error}</div>
+                    <div className="w-full px-2 py-2 mb-5 bg-red-200 text-center">{error}</div>
                 )}
                 <input
                     required
@@ -101,7 +102,7 @@ const SignUp: React.FC<SignUpProps> = ({ onClose, setUserLoggedIn }) => {
                 </button>
                 <div className="m-1 text-center">Or</div>
                 <button
-                    type="submit"
+                    onClick={() => setCurrentPage("signUpWithGoogle")}
                     className=" flex flex-row justifyCenter gap-3 w-full bg-gray-200 hover:bg-gray-300 text-white font-bold py-2 px-4 rounded"
                 >
                     <FaGoogle /> Sign Up with Google

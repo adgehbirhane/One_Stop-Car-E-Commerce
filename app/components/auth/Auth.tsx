@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import Login from "./login/Login";
 import SignUp from "./signUp/SignUp";
 import { User } from "@/app/types";
+import SignUpWithGoogle from "./signUp/SignUpWithGoogle";
 
 interface AuthProps {
     isOpen: boolean;
@@ -45,16 +46,19 @@ const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, setCurrentPag
                     </button>
                     <button
                         onClick={() => setCurrentPage("signUp")}
-                        className={currentPage === "signUp" ? "active-btn p-10 pb-5 hover:bg-gray-300 font-bold w-1/2" : "p-10 pb-5 text-white bg-gray-500 hover:bg-gray-300 font-bold w-1/2"}
+                        className={currentPage === "signUp" || currentPage === "signUpWithGoogle" ? "active-btn p-10 pb-5 hover:bg-gray-300 font-bold w-1/2" : "p-10 pb-5 text-white bg-gray-500 hover:bg-gray-300 font-bold w-1/2"}
                     >
                         Sign Up
                     </button>
                 </div>
                 {currentPage === "signIn" && (
-                    <Login onClose={onClose} setUserLoggedIn={setUserLoggedIn} />
+                    <Login onClose={onClose} setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
                 )}
                 {currentPage === "signUp" && (
-                    <SignUp onClose={onClose} setUserLoggedIn={setUserLoggedIn} />
+                    <SignUp onClose={onClose} setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
+                )}
+                {currentPage === "signUpWithGoogle" && (
+                    <SignUpWithGoogle onClose={onClose} setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
                 )}
             </div>
         </div>

@@ -11,9 +11,10 @@ import { User } from "@/app/types";
 interface LoginProps {
     onClose: () => void;
     setUserLoggedIn: React.Dispatch<React.SetStateAction<User | undefined>>
+    setCurrentPage: React.Dispatch<React.SetStateAction<string>>
 }
 
-const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn }) => {
+const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn, setCurrentPage }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -52,10 +53,10 @@ const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn }) => {
     };
 
     return (
-        <div className="p-10">
+        <div className="p-10" style={{ minWidth: 500, minHeight: 450 }}>
             <form onSubmit={handleSubmit}>
                 {error && (
-                    <div className="w-full px-2 py-2 mb-2 bg-red-200">{error}</div>
+                    <div className="w-full px-2 py-2 mb-5 bg-red-200 text-center">{error}</div>
                 )}
                 <input
                     required
@@ -91,9 +92,9 @@ const Login: React.FC<LoginProps> = ({ onClose, setUserLoggedIn }) => {
                 >
                     <FaGoogle /> Sign in with Google
                 </button>
-                <div className="m-1 text-right">
-                    <a className="hover:underline cursor-pointer">
-                        Don't have an account?</a>
+                <div className="m-1 my-2 text-right">
+                    Don't have an account?  <a onClick={() => setCurrentPage("signUp")} className="hover:underline cursor-pointer text-blue"> Yes!
+                    </a>
                 </div>
             </form>
         </div>

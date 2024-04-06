@@ -90,7 +90,7 @@ const Navbar = () => {
                 <CustomButton
                   title="Sign In"
                   btnType="button"
-                  containerStyles="text-primary-blue rounded-full bg-white min-w-[130px]"
+                  containerStyles={`text-primary-blue rounded-full  min-w-[130px] ${scrolled ? "bg-gray-100" : "bg-white"}`}
                   rightIcon=""
                   handleClick={toggleAuth}
                 />
@@ -99,7 +99,7 @@ const Navbar = () => {
                 <CustomButton
                   title="Sign Up"
                   btnType="button"
-                  containerStyles="text-primary-blue rounded-full bg-white min-w-[130px]"
+                  containerStyles={`text-primary-blue rounded-full  min-w-[130px] ${scrolled ? "bg-gray-100" : "bg-white"}`}
                   rightIcon=""
                   handleClick={toggleAuth}
                 />
