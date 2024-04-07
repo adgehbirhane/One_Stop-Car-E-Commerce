@@ -14,7 +14,7 @@ function MyCart({ allCars }: MyCartProps) {
     const isCarsEmpty = allCars.length < 1;
 
     return (
-        <div className="mt-22 padding-x padding-y max-width" id="discover">
+        <div className="mt-22 padding-x padding-y max-width" id="discover" style={{ minHeight: 1000 }}>
             <div className="home_text-container">
                 <div className="mt-14">Explore the cars you might like</div>
             </div>
@@ -36,10 +36,10 @@ function MyCart({ allCars }: MyCartProps) {
                     </div>
                 </section>
             ) : (
-                <h2 className="home__error-container mb-500">
+                <div className="home__error-container m-100">
                     <Image src="/illustration/pageNotFound.gif" width={200} height={100} unoptimized alt="data not found" className="object-contain" />
                     <h2 className="text-black text-xl font-bold">Oops, You have no product in the cart</h2>
-                </h2>
+                </div>
             )}
         </div>
     );
