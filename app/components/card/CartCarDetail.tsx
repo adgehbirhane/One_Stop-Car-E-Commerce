@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import { CarProps } from "@/app/types";
 import { generateCarImageUrl } from "@/app/utils";
-import CustomButton from "../button/CustomButton";
 import axiosInstance from "../../api";
 import SERVER_API_URL from "../../config";
 
@@ -20,13 +19,17 @@ interface CartCarDetailsProps {
 const CartCarDetails = ({ isOpen, closeModal, car }: CartCarDetailsProps) => {
 
     const cartId: string | undefined = car.id;
+    const [loading, setLoading] = useState(false);
 
     const handleBuyCart = async () => {
+        setLoading(true);
         try {
             const response = await axiosInstance.post(`${SERVER_API_URL}/order/payment/${cartId}`);
             if (response.status === 201) {
-                console.log("bill: ", response.data.bill_url)
-                window.open(response.data.bill_url, '_blank');
+                const billUrl = response.data.bill_url;
+                // console.log("bill: ", response.data.bill_url)
+                // console.log("billUrl: ", billUrl)
+                window.open(billUrl, '_blank');
                 closeModal()
             }
         } catch (e: any) {
@@ -34,12 +37,15 @@ const CartCarDetails = ({ isOpen, closeModal, car }: CartCarDetailsProps) => {
                 toast.error('Please check your internet connection');
             } else if (e.response && e.response.status === 406) {
                 toast.error('user not found!');
+            } else if (e.response && e.response.status === 500) {
+                toast.error('Internal server Error, Hint: Chapa rule missed!');
             } else if (e.response && e.response.status === 404) {
                 toast.error('cart not found!');
             } else {
                 toast.error('unKnown error, please refresh and try again!');
             }
         }
+        setLoading(false);
     }
 
     return (
@@ -155,13 +161,22 @@ const CartCarDetails = ({ isOpen, closeModal, car }: CartCarDetailsProps) => {
 
                                         </div>
                                         <div className="container">
-                                            <CustomButton
-                                                title="Buy this product"
-                                                containerStyles="w-full py-[16px] rounded-full bg-primary-blue"
-                                                textStyles="text-white text-[14px] leading-[17px] font-bold"
-                                                rightIcon="/icon/cart.png"
-                                                handleClick={handleBuyCart}
-                                            />
+                                            <button
+                                                disabled={loading}
+                                                type="submit"
+                                                onClick={handleBuyCart}
+                                                className={`flex justify-center items-center w-full ${loading ? "bg-gray-300" : "bg-blue-500  hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded`}
+                                            >
+                                                {loading && <div className="animate-spin rounded-full  h-5 w-5 border-t-2 border-b-2 border-gray-900"></div>}
+
+                                                Buy this product
+                                                <Image
+                                                    src="/icon/cart.png"
+                                                    alt="right icon"
+                                                    className="object-contain"
+                                                    width={20} height={20}
+                                                />
+                                            </button>
                                         </div>
                                     </div>
                                 </Dialog.Panel>
@@ -170,6 +185,7 @@ const CartCarDetails = ({ isOpen, closeModal, car }: CartCarDetailsProps) => {
                     </div>
                 </Dialog>
             </Transition>
+            <ToastContainer />
         </>
     );
 }

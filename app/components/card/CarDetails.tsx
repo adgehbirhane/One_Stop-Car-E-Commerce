@@ -50,18 +50,20 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
         model: car.model,
         transmission: car.transmission,
         year: car.year,
-        price: carRent * 30 * 12000,
+        price: carRent,
       });
       if (response.status === 201) {
         toast.success("Item added to cart successfully!");
-        // console.log('Show success toast')
       }
     } catch (e: any) {
       if (e.code === 'ERR_NETWORK') {
         toast.error('Please check your internet connection');
+      } else if (e.response && e.response.status === 404) {
+        toast.error('You are not registered to add cars to cart!');
       } else if (e.response && e.response.status === 406) {
         toast.error('This product is already added!');
       } else {
+        console.log(e)
         toast.error('unKnown error, please refresh and try again!');
       }
     }

@@ -13,7 +13,7 @@ const CustomButton = ({
   return (
     <button
       disabled={false}
-      type={"button"}
+      // type={"button"}
       className={`custom-btn ${containerStyles} hover:bg-lightblue hover:text-black hover: text-xl`}
       onClick={handleClick}
     >
