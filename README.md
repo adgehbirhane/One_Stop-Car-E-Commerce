@@ -8,7 +8,7 @@
         - Reset password with email.
     - What we can do?
         - We can browse cars.
-        - We can add to cart cars.
+        - We can add cars to cart.
         - We can buy cars from our cart.
         - We can browse cars in our cart.
         - We can browse our cars after we successfully bought with chapa payment gateway.
