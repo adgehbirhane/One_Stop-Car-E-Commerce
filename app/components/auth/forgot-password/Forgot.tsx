@@ -3,17 +3,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 import SERVER_API_URL from "@/app/config";
-import { jwtDecode } from 'jwt-decode';
-import { User } from "@/app/types";
 
 interface ForgotProps {
-    setUserLoggedIn: React.Dispatch<React.SetStateAction<User | undefined>>
     setCurrentPage: React.Dispatch<React.SetStateAction<string>>
+    email: string,
+    setEmail: React.Dispatch<React.SetStateAction<string>>
 }
 
-const Forgot: React.FC<ForgotProps> = ({ setUserLoggedIn, setCurrentPage }) => {
-    const [email, setEmail] = useState("");
+const Forgot: React.FC<ForgotProps> = ({ email, setEmail, setCurrentPage }) => {
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("")
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,16 +23,13 @@ const Forgot: React.FC<ForgotProps> = ({ setUserLoggedIn, setCurrentPage }) => {
                 email
             });
             if (response.status === 202) {
-                const user = response.data;
-                localStorage.setItem("token", user.token)
-                const decodedData = jwtDecode(user.token) as User;
-                if (decodedData) {
-                    setUserLoggedIn(decodedData);
-                    setCurrentPage("verificationCode")
-                }
+                setCurrentPage("verificationCode")
+                setSuccess("We have already sent an email via this email.");
+                setError("");
             }
 
         } catch (e: any) {
+            setSuccess("");
             if (e.code === 'ERR_NETWORK') {
                 setError('Please check your internet connection');
             } else if (e.response && e.response.status === 404) {
@@ -43,6 +39,7 @@ const Forgot: React.FC<ForgotProps> = ({ setUserLoggedIn, setCurrentPage }) => {
             } else if (e.response && e.response.status === 406) {
                 setError('blocked user!');
             } else {
+                console.log("error", e)
                 setError('unKnown error, please refresh and try again!');
             }
         }
@@ -54,6 +51,9 @@ const Forgot: React.FC<ForgotProps> = ({ setUserLoggedIn, setCurrentPage }) => {
             <form onSubmit={handleSubmit}>
                 {error && (
                     <div className="w-full px-2 py-2 mb-5 bg-red-200 text-center">{error}</div>
+                )}
+                {success && (
+                    <div className="w-full px-2 py-2 mb-5 bg-green-200 text-center">{success}</div>
                 )}
                 <input
                     required

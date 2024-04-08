@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Login from "./login/Login";
 import SignUp from "./signUp/SignUp";
 import { User } from "@/app/types";
@@ -21,6 +21,7 @@ interface AuthProps {
 const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, userLoggedIn, setCurrentPage, setUserLoggedIn }) => {
 
     const authRef = useRef<HTMLDivElement>(null);
+    const [email, setEmail] = useState("");
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -55,6 +56,7 @@ const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, userLoggedIn,
                         Sign Up
                     </button>
                 </div>
+
                 {currentPage === "signIn" && (
                     <Login onClose={onClose} setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
                 )}
@@ -65,13 +67,13 @@ const Auth: React.FC<AuthProps> = ({ isOpen, onClose, currentPage, userLoggedIn,
                     <SignUpWithGoogle onClose={onClose} setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
                 )}
                 {currentPage === "forgot" && (
-                    <Forgot setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
+                    <Forgot setCurrentPage={setCurrentPage} email={email} setEmail={setEmail} />
                 )}
                 {currentPage === "verificationCode" && (
-                    <VerificationCode userLoggedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCurrentPage={setCurrentPage} />
+                    <VerificationCode email={email} setCurrentPage={setCurrentPage} />
                 )}
                 {currentPage === "changePassword" && (
-                    <ChangePassword onClose={onClose} setUserLoggedIn={setUserLoggedIn} />
+                    <ChangePassword email={email} onClose={onClose} setUserLoggedIn={setUserLoggedIn} />
                 )}
             </div>
         </div>

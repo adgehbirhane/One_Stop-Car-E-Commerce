@@ -3,37 +3,28 @@
 import React, { useState } from "react";
 import axios from "axios";
 import SERVER_API_URL from "@/app/config";
-import { jwtDecode } from 'jwt-decode';
-import { User } from "@/app/types";
 
 interface VerificationCodeProps {
-    userLoggedIn: User | undefined;
-    setUserLoggedIn: React.Dispatch<React.SetStateAction<User | undefined>>;
     setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
+    email: string;
 }
 
-const VerificationCode: React.FC<VerificationCodeProps> = ({ userLoggedIn, setUserLoggedIn, setCurrentPage }) => {
+const VerificationCode: React.FC<VerificationCodeProps> = ({ email, setCurrentPage }) => {
     const [code, setCode] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState("We have already sent an email via this email.");
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         try {
             const response = await axios.post(`${SERVER_API_URL}/auth/isValidCode`, {
-                email: userLoggedIn?.email || "adgehtech@gmail.com", code
+                email, code
             });
             if (response.status === 202) {
-                const user = response.data;
-                localStorage.setItem("token", user.token)
-                const decodedData = jwtDecode(user.token) as User;
-                if (decodedData) {
-                    setUserLoggedIn(decodedData);
-                }
-                setCurrentPage("verificationCode")
+                setCurrentPage("changePassword")
             }
-
         } catch (e: any) {
             if (e.code === 'ERR_NETWORK') {
                 setError('Please check your internet connection');
@@ -44,7 +35,7 @@ const VerificationCode: React.FC<VerificationCodeProps> = ({ userLoggedIn, setUs
             } else if (e.response && e.response.status === 406) {
                 setError('blocked user!');
             } else {
-                setError('unKnown error, please refresh and try again!');
+                setError('Expired code, or incorrect code, please refresh and try again!');
             }
         }
         setLoading(false)
@@ -56,12 +47,18 @@ const VerificationCode: React.FC<VerificationCodeProps> = ({ userLoggedIn, setUs
                 {error && (
                     <div className="w-full px-2 py-2 mb-5 bg-red-200 text-center">{error}</div>
                 )}
+                {success && (
+                    <div className="w-full px-2 py-2 mb-5 bg-green-200 text-center">{success}</div>
+                )}
                 <input
                     required
                     type="code"
                     placeholder="Verification code"
                     value={code}
-                    onChange={(e) => setCode(e.target.value)}
+                    onChange={(e) => {
+                        setCode(e.target.value);
+                        setSuccess("");
+                    }}
                     className="block w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                 />
                 <button

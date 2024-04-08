@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { LuLogOut } from "react-icons/lu";
 import { jwtDecode } from 'jwt-decode';
-import 'react-toastify/dist/ReactToastify.css';
 
 import { CustomButton, Auth } from "..";
 import { useRouter } from "next/navigation";
@@ -59,7 +58,14 @@ const Navbar = () => {
       if (response.status === 200) {
         if (userLoggedIn)
           getAvatar(userLoggedIn.sub);
-        toast.success("Profile image successfully changed.")
+        toast.success("Profile image successfully changed.", {
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+
       }
     } catch (e: any) {
       if (e.response.status === 404) {

@@ -1,19 +1,20 @@
 "use client"
 
 import React, { useState } from "react";
-import axiosInstance from "@/app/api";
 import SERVER_API_URL from "@/app/config";
 import { jwtDecode } from 'jwt-decode';
+import axios from "axios";
 import { useRouter } from 'next/navigation';
+
 import { User } from "@/app/types";
 
 interface ChangePasswordProps {
     onClose: () => void;
     setUserLoggedIn: React.Dispatch<React.SetStateAction<User | undefined>>
+    email: string;
 }
 
-const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose, setUserLoggedIn }) => {
-    const [email, setEmail] = useState("");
+const ChangePassword: React.FC<ChangePasswordProps> = ({ email, onClose, setUserLoggedIn }) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
@@ -24,16 +25,18 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose, setUserLoggedI
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
+        setError("");
 
         if (password !== confirmPassword) {
             setError('Password confirmation error!');
+            setLoading(false);
             return;
         }
         try {
-            const response = await axiosInstance.post(`${SERVER_API_URL}/auth/signin`, {
-                email, password
+            const response = await axios.patch(`${SERVER_API_URL}/auth/resetPassword`, {
+                email, newPassword: password
             });
-            if (response.status === 202) {
+            if (response.status === 200) {
                 const user = response.data;
                 localStorage.setItem("token", user.token)
                 const decodedData = jwtDecode(user.token) as User;
@@ -43,7 +46,6 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose, setUserLoggedI
                 router.push('/customer')
                 onClose();
             }
-
         } catch (e: any) {
             if (e.code === 'ERR_NETWORK') {
                 setError('Please check your internet connection');
@@ -51,10 +53,8 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose, setUserLoggedI
                 setError('No user found related by this email.');
             } else if ((e.response && e.response.status === 401) || (e.response && e.response.status === 400)) {
                 setError('incorrect email or password');
-            } else if (e.response && e.response.status === 406) {
-                setError('blocked user!');
             } else {
-                setError('unKnown error, please refresh and try again!');
+                setError('Expired code, or incorrect code, please refresh and try again!');
             }
         }
         setLoading(false);
@@ -68,14 +68,6 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose, setUserLoggedI
                 )}
                 <input
                     required
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:ring-blue-400"
-                />
-                <input
-                    required
                     type="password"
                     placeholder="Password"
                     value={password}
@@ -84,7 +76,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose, setUserLoggedI
                 />
                 <input
                     required
-                    type="confirmPassword"
+                    type="password"
                     placeholder="Confirm password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}

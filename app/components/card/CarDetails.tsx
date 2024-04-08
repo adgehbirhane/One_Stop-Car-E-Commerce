@@ -4,7 +4,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import { CarProps, User } from "@/app/types";
 import { calculateCarRent, generateCarImageUrl } from "@/app/utils";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import CustomButton from "../button/CustomButton";
 import axiosInstance from "../../api";
