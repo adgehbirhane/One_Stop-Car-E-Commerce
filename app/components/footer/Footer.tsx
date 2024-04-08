@@ -18,7 +18,7 @@ const Footer = () => {
           </Link>
         </div>
         <div>
-          <p className="text-base text-gray-700">Awesome Cars, 2025</p>
+          <p className="text-base text-gray-700">One-Stop Car E-Commerce, 2025</p>
           <p className="text-base text-gray-700">&copy; All rights reserved</p>
         </div>
         <div className="flex flex-row justify-between gap-2">
