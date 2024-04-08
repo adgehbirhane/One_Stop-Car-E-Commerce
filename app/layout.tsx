@@ -3,7 +3,7 @@ import "./globals.css";
 import { Footer, Navbar } from "@/app/components";
 
 export const metadata: Metadata = {
-  title: "Nobel Cars",
+  title: "One-Stop Car E-Commerce",
   description: "Awesome Cars",
 };
 
