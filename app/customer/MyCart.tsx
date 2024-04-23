@@ -39,6 +39,7 @@ function MyCart({ allCars }: MyCartProps) {
                 <div className="home__error-container m-100">
                     <Image src="/illustration/pageNotFound.gif" width={200} height={100} unoptimized alt="data not found" className="object-contain" />
                     <h2 className="text-black text-xl font-bold">Oops, You have no product in the cart</h2>
+                    <h2 className="text-black text-xl font-bold">Please browse and add to cart cars to buy!</h2>
                 </div>
             )}
         </div>
