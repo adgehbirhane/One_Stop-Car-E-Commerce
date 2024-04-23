@@ -7,7 +7,7 @@ const PageNotFound = () => {
             <div className="flex flex-col justify-center h-screen">
                 <Image src="/illustration/pageNotFound.gif" width={500} height={500} unoptimized alt="data not found" className="object-contain" />
                 <h1 className="text-4xl font-bold">
-                    404 | Page Not Found | Try Again
+                    404 | Page Not Found | Please try Again!
                 </h1>
             </div>
         </div>
